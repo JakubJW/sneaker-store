@@ -97,5 +97,12 @@ export default {
   loading: {
     color: '#388E3C',
     height: '5px'
+  },
+
+  generate: {
+    dir: 'gh_pages', // gh_pages/ instead of dist/
+    subFolders: false, // HTML files are generated according to the route path
+    ssr: false,
+    target: 'static'
   }
 }
