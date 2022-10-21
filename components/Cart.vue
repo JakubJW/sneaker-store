@@ -2,38 +2,41 @@
   <v-dialog v-model="dialog" width="500" :fullscreen="$vuetify.breakpoint.mobile">
         <template v-slot:activator="{ on, attrs }">
             <v-btn icon color="grey-darken-2" v-bind="attrs" v-on="on">
-              <v-badge color="theme" overlap v-model="showBagde" :content="cartProducts.length">
+              <v-badge color="theme" overlap v-model="showBagde" :content="totalQuantity">
                 <v-icon>mdi-shopping</v-icon>
               </v-badge>
             </v-btn>
         </template>
-        <v-card class="cartContainer">
-            <v-card-title class="text-h5 grey lighten-2 text-uppercase">
-                Koszyk
-                <v-btn icon color="success" @click="dialog=false">
+        <v-card class="cartContainer d-flex flex-column">
+          <v-card class="d-flex justify-end" elevation="0">
+            <v-btn icon color="theme" @click="dialog=false">
                 <v-icon>mdi-window-close</v-icon>
             </v-btn>
+          </v-card>
+            <v-card-title class="text-h5 text-uppercase">
+                Koszyk
             </v-card-title>
-            <v-card-text class="text-center my-4 text-uppercase" v-show="!cartProducts.length">koszyk jest pusty</v-card-text>
+            <v-card-text class="d-flex my-4 text-uppercase justify-center" v-if="!cartProducts.length">koszyk jest pusty</v-card-text>
             <v-list>
                 <v-list-item class="my-1" v-for="product in cartProducts" :key="product.id" :class="{ 'transition': deletedItem === product.id }">
                  <v-img contain max-width="80" fill-height :src="product.image"></v-img>
                     <v-list-item-content>
                         <v-list-item-title class="mx-2 text-uppercase dark-grey--text">{{product.name}}</v-list-item-title>
                         <v-list-item-subtitle class="mx-2">{{product.size}}</v-list-item-subtitle> 
-                        <v-list-item-subtitle class="mx-2">{{product.price}}</v-list-item-subtitle>
-                         
-                         <v-btn absolute top right text max-width="50" color="error" @click="removeProduct(product)">Usuń</v-btn>
-                    </v-list-item-content>
+                        <v-list-item-subtitle class="mx-2">{{product.price + "zł"}}</v-list-item-subtitle>
+                      </v-list-item-content>
+                      <v-card class="d-flex flex-column align-center" elevation="0">
+                          <v-btn icon color="success" @click="addProduct({product, size: product.size})"><v-icon>mdi-plus</v-icon></v-btn>
+                        {{product.quantity}}
+                        <v-btn icon  color="error" @click="removeProduct({product, size: product.size})">
+                        <v-icon>mdi-minus</v-icon></v-btn>  
+                        </v-card>
                 </v-list-item>
             </v-list>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="error" text @click="dialog=false">
-                    Zamknij koszyk
-                </v-btn>
-            </v-card-actions>
+            <v-spacer/>
+            <v-card class="d-flex justify-end" elevation="0">
+              <h3 class="ma-4">{{"Suma: " + totalPrice + "zł"}}</h3>  
+            </v-card>
         </v-card>
     </v-dialog>
 </template>
@@ -55,7 +58,9 @@ export default {
     },
 
     ...mapGetters('cart', {
-      cartProducts: 'cartProducts'
+      cartProducts: 'cartProducts',
+      totalPrice: 'totalPrice',
+      totalQuantity: 'totalQuantity'
     }),
 
     showBagde(){
@@ -69,16 +74,9 @@ export default {
   },
 
   methods: {
-    removeFromCart: function(value) {
-      this.deletedItem = value
-      setTimeout( () => {
-        this.$store.dispatch('removeFromCart', value)
-        this.deletedItem = null
-      }, 300)
-    },
-
     ...mapActions('cart', {
-      removeProduct: 'removeProduct' 
+      removeProduct: 'removeProduct', 
+      addProduct: 'addProduct'
     })
   }
 }

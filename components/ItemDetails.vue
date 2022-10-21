@@ -1,39 +1,41 @@
 <template>
-    <v-dialog v-model="dialog" width="800" class="d-flex justify-center" :fullscreen="$vuetify.breakpoint.mobile">
+    <v-dialog v-model="dialog" width="70%" class="d-flex justify-center" :fullscreen="$vuetify.breakpoint.mobile">
         <template v-slot:activator="{ on, attrs }">
             <v-card elevation="0" tile>
                 <v-img class="image" contain max-width="300" fill-height :src="product.image" v-bind="attrs" v-on="on" />
                 <v-card-subtitle dark class="font-weight-medium">{{ product.name }}</v-card-subtitle>
-                <v-card-text>{{ product.price }}</v-card-text>
+                <v-card-text>{{product.price + "zł"}}</v-card-text>
             </v-card>
         </template>
-        
-        <v-card class="cartContainer" width="800" tile pd="4" elevation="0">
-            <v-btn icon color="success" @click="dialog=false">
+        <v-card class="detailsContainer" tile pd="4" elevation="0">
+           <v-card class="d-flex justify-end" elevation="0">
+            <v-btn icon color="theme" @click="dialog=false">
                 <v-icon>mdi-window-close</v-icon>
             </v-btn>
-            <v-row class="d-flex align-center">
+           </v-card>
+            
+            <v-row class="d-flex align-center flex-grow-0">
                 <v-col md="6" xs="1" class="d-flex flex-column align-center">
                     <v-img contain max-width="300" fill-height :src="product.image"></v-img>
-                    <v-btn class="mt-4" color="success" :disabled="!isSizeSet" @click="addProduct({product, size})">Do koszyka</v-btn>
+                    <v-btn class="mt-4 white--text" color="theme" :disabled="!isSizeSet" @click="addProduct({product, size})">Do koszyka</v-btn>
                 </v-col>
 
-                <v-col xs="x1" md="6">
+                <v-col xs="x1" md="4">
                     <v-card-text>
                         <p class="text-h4 text--primary">{{ product.name }}</p>
                         <p>{{ product.category }}</p>
-                        <p class="text--primary">{{ product.price }}</p>
+                        <p class="text--primary">{{product.price + "zł"}}</p>
                         <p>Wybierz rozmiar:</p>
                     </v-card-text>
                     
                     <v-item-group>
-                        <v-btn-toggle v-model="toggle_exclusive" tile color="primary">
+                        <v-btn-toggle v-model="toggle_exclusive" color="deep-purple accent-3"> 
                             <v-row>
                                 <v-col cols="4" v-for="col in col1" :key="col.value" class="d-flex justify-center">
                                     <v-btn @click="setSize(col.value)" tile elevation="0" width="80">
-                                    {{col.value}}
+                                        {{col.value}}
                                     </v-btn>
-                                </v-col>
+                                </v-col> 
                             </v-row>
                         </v-btn-toggle>
                     </v-item-group>
@@ -46,9 +48,11 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+    name: 'ItemDetails',
     props: ['productId'],
     data() {
         return{ 
+            toggle_exclusive: null,
             dialog: false,
             isSizeSet: false,
             size: null,
@@ -76,21 +80,22 @@ export default {
     computed: {
         product() {
             return this.$store.getters.dialog(this.productId)
-        }
+        },
     },
 
     methods: {
-        addToCart(value) {
-            this.$store.dispatch('addToCart', value)
-        },
-
         ...mapActions('cart', [
             'addProduct'
         ]),
 
         setSize(value) {
-            this.size = value
-            this.isSizeSet = true
+            if (this.size == value) {
+                this.size = null
+                this.isSizeSet = false
+            } else {
+                this.size = value
+                this.isSizeSet = true
+            }
         }
     }
 }

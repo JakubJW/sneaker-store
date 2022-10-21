@@ -3,7 +3,7 @@ export const state = () => ({
     { 
       id: 0, 
       name: 'Nike React Infinity Run Flyknit 3', 
-      price: '749,99zł', 
+      price: 749.99, 
       category: 'Bieganie', 
       image: require('@/assets/NikeReactInfinityRunFlyknit3.webp'), 
       quantity: 0, 
@@ -13,16 +13,17 @@ export const state = () => ({
     { 
       id: 1, 
       name: 'Nike ZoomX Vaporfly NEXT% 2 Ekiden', 
-      price: '1229,99zł', 
+      price: 1229.99, 
       category: 'Bieganie', 
       image: require('@/assets/NikeZoomXVaporflyNEXT2Ekiden.webp'), 
-      
+      quantity: 0, 
+
   },
 
     { 
       id: 2, 
       name: "Nike Blazer Mid '77",
-      price: '469,99zł', 
+      price: 469.99, 
       category: 'Lifestyle', 
       image: require('@/assets/NikeBlazerMid77.webp'), 
       quantity: 0, 
@@ -32,7 +33,7 @@ export const state = () => ({
     { 
       id: 3, 
       name: 'Nike Air Max Pre-Day', 
-      price: '629,99zł', 
+      price: 629.99, 
       category: 'Lifestyle', 
       image: require('@/assets/NikeAirMaxPreDay.webp'), 
       quantity: 0, 
@@ -42,7 +43,7 @@ export const state = () => ({
     { 
       id: 4, 
       name: 'Nike Crater Impact', 
-      price: '529,99zł', 
+      price: 529.99, 
       category: 'Lifestyle', 
       image: require('@/assets/NikeCraterImpact.webp'), 
       quantity: 0, 
@@ -52,7 +53,7 @@ export const state = () => ({
     { 
       id: 5,
       name: 'Nike Air Max Bolt', 
-      price: '429,99zł', 
+      price: 429.99, 
       category: 'Lifestyle', 
       image: require('@/assets/NikeAirMaxBolt.webp'), 
       quantity: 0, 
@@ -62,7 +63,7 @@ export const state = () => ({
     { 
       id: 6, 
       name: 'Nike Air Zoom Pegasus 39', 
-      price: '549,99zł', 
+      price: 549.99, 
       category: 'Bieganie', 
       image: require('@/assets/NikeAirZoomPegasus39.webp'), 
       quantity: 0, 
@@ -72,7 +73,7 @@ export const state = () => ({
     { 
       id: 7, 
       name: 'Nike Air Zoom Vomero 16', 
-      price: '699,99zł', 
+      price: 699.99, 
       category: 'Bieganie', 
       image: require('@/assets/NikeAirZoomVomero16.webp'), 
       quantity: 0, 
@@ -82,7 +83,7 @@ export const state = () => ({
     { 
       id: 8, 
       name: 'Nike Winflo 8', 
-      price: '469,99zł', 
+      price: 469.99, 
       category: 'Bieganie', 
       image: require('@/assets/NikeWinflo8.webp'), 
       quantity: 0,
@@ -92,7 +93,7 @@ export const state = () => ({
     { 
       id: 9, 
       name: 'Jordan One Take 3', 
-      price: '469,99zł', 
+      price: 469.99, 
       category: 'Koszykówka', 
       image: require('@/assets/JordanOneTake3.webp'), 
       quantity: 0, 
@@ -102,26 +103,25 @@ export const state = () => ({
     { 
       id: 10, 
       name: 'KD Trey 5 IX', 
-      price: '329,97zł', 
+      price: 329.97, 
       category: 'Koszykówka', 
       image: require('@/assets/KDTrey5IXwebp.webp'), 
       quantity: 0, 
-      
+
     }
   ]
 })
 
 export const getters = {
-
-  inFavs (state) {
-    return state.products.filter(product => product.inFavs)
+  products: state => () => {
+    return state.products
   },
 
-  productsFilter: (rootState) => (category) => {
+  productsFilter: (state) => (category) => {
     if(!category) { 
-      return rootState.essa.products
+      return state.products
     } else { 
-      return rootState.essa.products.filter(product => product.category === category) 
+      return state.products.filter(product => product.category === category) 
     }
   },
 
@@ -135,36 +135,26 @@ export const getters = {
 }
 
 export const mutations = {
-  addToFavs: (state, payload) => {
-    state.products[payload].inFavs = true
-  },
-
-  removeFromFavs: (state, payload) => {
-    state.products[payload].inFavs = false
-  },
+  
 }
 
 export const actions = {
-  addToFavs: (context, payload) => {
-    context.commit('addToFavs', payload)
-  },
-
-  removeFromFavs: (context, payload) => {
-    context.commit('removeFromFavs', payload)
-  },
+  
 }
 
 export const modules = {
   cart: {
     namespaced: true,
     state: () => ({
-      items: []
+      items: [],
+      quantity: 0,
+      price: 0,
     }),
 
     getters: {
       cartProducts: (state, getters, rootState) => {
         return state.items.map(({ id, quantity, size }) => {
-          const product = rootState.essa.products.find(product => product.id === id) 
+          const product = rootState.products.find(product => product.id === id) 
           return {
             id: product.id,
             name: product.name,
@@ -175,26 +165,36 @@ export const modules = {
             size
           }
         })
+      },
+
+      totalPrice: (state) => {
+        return state.price.toFixed(2)
+      },
+
+      totalQuantity: (state) => {
+        return state.quantity
       }
     },
 
     actions: {
       addProduct({state, commit}, {product, size}) {
-        const cartItem = state.items.find(item => item.id === product.id && item.size === size)
+        const cartItem = state.items.find(item => item.id === product.id && (item.size === size || size === null))
         if(!cartItem) {
-          commit('pushProductToCart', { id: product.id, size: size } )
+          commit('pushProductToCart', {id: product.id, size: size})
         } else {
           commit('incrementQuantity', cartItem)
         }
+        commit('incrementTotalPrice',  {price: product.price})
       },
 
-      removeProduct({state, commit}, product) {
-        const cartItem = state.items.find(item => item.id === product.id)
+      removeProduct({state, commit}, {product, size}) {
+        const cartItem = state.items.find(item => item.id === product.id && item.size === size)
         if(cartItem.quantity===1) {
           commit('removeProductFromCart', cartItem)
         } else {
           commit('decrementQuantity', cartItem)
         }
+        commit('decrementTotalPrice',{price: product.price})
       }
     },
 
@@ -208,13 +208,18 @@ export const modules = {
       },
 
       removeProductFromCart(state, product) {
-        const cartItem = state.items.find(item => item.id === product.id)
+        const cartItem = state.items.find(item => item.id === product.id && item.size === product.size)
         state.items.splice(state.items.indexOf(cartItem), 1)
       },
 
-      decrementQuantity(state, { id }) {
-        const cartItem = state.items.find(item => item.id ===id)
+      decrementQuantity(state, { id, size }) {
+        const cartItem = state.items.find(item => item.id === id && item.size === size)
         cartItem.quantity--
+      },
+
+      decrementTotalPrice(state, { price }) {
+        state.price -= price
+        state.quantity--
       },
 
       setItemSize(state, { id, size } ) {
@@ -227,7 +232,12 @@ export const modules = {
         cartItem.quantity++
       },
 
-      setCartItems (state, {items}) {
+      incrementTotalPrice (state, { price }) {
+        state.price += price
+        state.quantity++
+      },
+
+      setCartItems (state, { items }) {
         state.items = items
       }
     }

@@ -1,12 +1,10 @@
 <template>
   <div class="all">
-    <h1 class="text-uppercase mx-10 mt-10">
-      Wszystkie Buty
-    </h1>
+    <h1 class="text-uppercase mx-10 mt-10">Wszystkie Buty</h1>
     <v-container class="my-5">
       <v-row>
-        <v-col v-for="product in products" :key="product.id" xs="1" md="3" class="d-flex justify-center"  >
-            <ItemDetails :product-id="product.id"/>
+        <v-col v-for="product in products" :key="product.id" xs="1" md="3" class="d-flex justify-center">
+          <ItemDetails :product-id="product.id"/>
         </v-col>
       </v-row>
     </v-container>
@@ -14,31 +12,15 @@
 </template>
 
 <script>
-
 import ItemDetails from '~/components/ItemDetails.vue'
 export default {
     name: "IndexPage",
-    data() {
-        return {
-            loading: {
-                color: "orange",
-                height: "10px"
-            }
-        };
-    },
     computed: {
         products() {
           return this.$store.getters.productsFilter()
         }
     },
     methods: {
-        addToCart: function (value) {
-            this.$store.dispatch("addToCart", value);
-            this.$emit("openDialog", value);
-        },
-        addToFavs: function (value) {
-            this.$store.dispatch("addToFavs", value);
-        },
         mounted() {
             this.$nextTick(() => {
                 this.$nuxt.$loading.start();
@@ -50,14 +32,3 @@ export default {
 }
 
 </script>
-
-<style>
-.v-card--reveal {
-  align-items: center;
-  top: 0;
-  justify-content: center;
-  opacity: 1;
-  position: absolute;
-  width: 50%;
-}
-</style>

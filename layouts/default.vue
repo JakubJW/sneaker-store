@@ -1,14 +1,16 @@
 <template>
   <v-app>
     <v-app-bar flat color="grey lighten-3" class="flex-grow-0">
-      <v-toolbar-title class="text-uppercase grey-darken-2--text" mx="auto">
-        <span class="font-weight-light">sneaker</span>
-        <span>store</span>
-      </v-toolbar-title>
+      <NuxtLink to="/" class="title-link grey-darken--text">
+        <v-toolbar-title class="text-uppercase grey-darken-2--text" mx="auto">
+          <span class="font-weight-light">sneaker</span>
+          <span>store</span>
+        </v-toolbar-title>
+      </NuxtLink>
 
       <v-spacer />
 
-      <v-text-field
+        <v-text-field
         id="id"
         v-model="searchText"
         class="mt-5"
@@ -16,7 +18,7 @@
         label="Wyszukaj buciwo"
         color="success darken-2"
         @keyup.enter="search"
-        v-if="!$vuetify.breakpoint.mobile || searching"
+        v-if="!$vuetify.breakpoint.mobile"
       />
 
       <v-btn icon @click="mobileSearching">
@@ -58,10 +60,21 @@
       </v-card>
     </v-menu>
   
-    <template v-slot:extension v-if="!$vuetify.breakpoint.mobile">
+    <template v-slot:extension v-if="!$vuetify.breakpoint.mobile || ($vuetify.breakpoint.mobile && searching)">
+      <v-text-field
+        id="id"
+        v-model="searchText"
+        class="mt-5"
+        name="name"
+        label="Wyszukaj buciwo"
+        color="success darken-2"
+        @keyup.enter="search"
+        v-if="$vuetify.breakpoint.mobile && searching"
+      />
         <v-tabs
           v-model="tab"
           fixed-tabs
+          v-if="!$vuetify.breakpoint.mobile"
         >
           <v-tabs-slider color="theme"></v-tabs-slider>
 
@@ -87,7 +100,9 @@
       </v-container>
     </v-main>
 
-    <v-footer />
+    <v-footer>
+      
+    </v-footer>
   </v-app>
 </template>
 
@@ -169,5 +184,10 @@ export default {
 .itemDetails {
   position: absolute;
   z-index: 1;
+}
+
+a.nuxt-link-active {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.87);
 }
 </style>
