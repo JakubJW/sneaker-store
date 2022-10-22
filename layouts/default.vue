@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style>
-  a.nuxt-link-active {
+  a.nuxt-link-exact-active {
     text-decoration: none;
     color: rgba(0, 0, 0, 0.87);
   }
