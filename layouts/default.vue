@@ -11,7 +11,7 @@
       <v-spacer />
 
         <v-text-field
-        v-model="searchText"
+        v-model="searchPhrase"
         class="mt-5"
         label="Wyszukaj buciwo"
         color="success darken-2"
@@ -160,8 +160,8 @@ export default {
 </script>
 
 <style>
-  .v-application a {
+   .v-application a {
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.87);
+    color: #616161;
   }
 </style>
