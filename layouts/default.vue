@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style>
-  a.nuxt-link-active {
+  .v-application a {
     text-decoration: none;
     color: rgba(0, 0, 0, 0.87);
   }
