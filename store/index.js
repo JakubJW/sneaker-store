@@ -113,11 +113,7 @@ export const state = () => ({
 })
 
 export const getters = {
-  products: state => () => {
-    return state.products
-  },
-
-  productsFilter: (state) => (category) => {
+  products: (state) => (category) => {
     if(!category) { 
       return state.products
     } else { 
@@ -129,17 +125,9 @@ export const getters = {
     return state.products.filter(product => product.name.toUpperCase().match(name.toUpperCase()))
   },
 
-  dialog: (state) => (value) => {
+  product: (state) => (value) => {
     return state.products.find( product => product.id === value)
   }
-}
-
-export const mutations = {
-  
-}
-
-export const actions = {
-  
 }
 
 export const modules = {
