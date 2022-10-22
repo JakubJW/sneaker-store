@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import ItemDetails from '../components/ItemDetails.vue'
-export default {
-  name: 'LifestylePage',
-  computed: {
-    products(){
-      return this.$store.getters.productsFilter('Lifestyle')
-    }
-  },
-  components: { ItemDetails }
-}
+  import ItemDetails from '../components/ItemDetails.vue'
+  export default {
+    name: 'LifestylePage',
+    computed: {
+      products(){
+        return this.$store.getters.products('Lifestyle')
+      }
+    },
+    components: { ItemDetails }
+  }
 </script>

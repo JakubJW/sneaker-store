@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar flat color="grey lighten-3" class="flex-grow-0">
-      <NuxtLink to="/" class="title-link grey-darken--text">
+      <NuxtLink to="/">
         <v-toolbar-title class="text-uppercase grey-darken-2--text" mx="auto">
           <span class="font-weight-light">sneaker</span>
           <span>store</span>
@@ -11,24 +11,21 @@
       <v-spacer />
 
         <v-text-field
-        id="id"
         v-model="searchText"
         class="mt-5"
-        name="name"
         label="Wyszukaj buciwo"
         color="success darken-2"
         @keyup.enter="search"
         v-if="!$vuetify.breakpoint.mobile"
       />
 
-      <v-btn icon @click="mobileSearching">
+      <v-btn icon :disabled="!$vuetify.breakpoint.mobile" @click="revealMobileInput">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
   
       <v-spacer v-show="!$vuetify.breakpoint.mobile"/>
       
       <Cart />
-      <Favorites v-if="!$vuetify.breakpoint.mobile"/>
       
       <v-btn v-show="!$vuetify.breakpoint.mobile && !loggedIn" text color="grey-darken-2" @click="login">
         <span>Zaloguj</span>
@@ -60,24 +57,17 @@
       </v-card>
     </v-menu>
   
-    <template v-slot:extension v-if="!$vuetify.breakpoint.mobile || ($vuetify.breakpoint.mobile && searching)">
+    <template v-slot:extension v-if="!$vuetify.breakpoint.mobile || ($vuetify.breakpoint.mobile && mobileSearch)">
       <v-text-field
-        id="id"
-        v-model="searchText"
+        v-model="searchPhrase"
         class="mt-5"
-        name="name"
         label="Wyszukaj buciwo"
         color="success darken-2"
         @keyup.enter="search"
-        v-if="$vuetify.breakpoint.mobile && searching"
+        v-if="$vuetify.breakpoint.mobile && mobileSearch"
       />
-        <v-tabs
-          v-model="tab"
-          fixed-tabs
-          v-if="!$vuetify.breakpoint.mobile"
-        >
+        <v-tabs fixed-tabs v-if="!$vuetify.breakpoint.mobile">
           <v-tabs-slider color="theme"></v-tabs-slider>
-
           <v-tab
             v-for="category in categories"
             :key="category.text"
@@ -95,8 +85,7 @@
 
     <v-main>
       <v-container>
-        <ItemDetails v-if="dialog" class="itemDetails" :productId="productId" />
-        <NuxtChild :search="searchText" @openDialog="showDialog"/>
+        <NuxtChild :search="searchPhrase"/>
       </v-container>
     </v-main>
 
@@ -108,21 +97,16 @@
 
 <script>
 import Cart from '../components/Cart.vue'
-import Favorites from '../components/Favorites.vue'
-import ItemDetails from '../components/ItemDetails.vue'
+
 import MobileDrawer from '../components/MobileDrawer.vue'
 
 export default {
     name: "DefaultLayout",
     data() {
         return {
-            tab: null,
-            searching: false,
+            mobileSearch: false,
             loggedIn: null,
-            name: null,
-            searchText: "",
-            dialog: false,
-            productId: null,
+            searchPhrase: "",
             categories: [
                 { text: "Wszystkie buty", route: "/" },
                 { text: "Lifestyle", route: "/lifestyle" },
@@ -132,13 +116,8 @@ export default {
         }
     },
     methods: {
-        showDialog(value){
-            this.dialog = true
-            this.productId = value
-        },
-
-        mobileSearching() {
-          this.searching=!this.searching
+        revealMobileInput() {
+          this.mobileSearch=!this.mobileSearch
         },
 
         search() {
@@ -176,18 +155,13 @@ export default {
       })
     },
 
-    components: { Cart, Favorites, ItemDetails, MobileDrawer }
+    components: { Cart, MobileDrawer }
 }
 </script>
 
 <style>
-.itemDetails {
-  position: absolute;
-  z-index: 1;
-}
-
-a.nuxt-link-active {
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
-}
+  a.nuxt-link-active {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+  }
 </style>

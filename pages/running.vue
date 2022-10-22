@@ -17,7 +17,7 @@ export default {
   name: 'RunningPage',
   computed: {
     products(){
-      return this.$store.getters.productsFilter('Bieganie')
+      return this.$store.getters.products('Bieganie')
     }
   },
   components: { ItemDetails }

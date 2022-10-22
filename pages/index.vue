@@ -12,23 +12,22 @@
 </template>
 
 <script>
-import ItemDetails from '~/components/ItemDetails.vue'
-export default {
-    name: "IndexPage",
-    computed: {
-        products() {
-          return this.$store.getters.productsFilter()
-        }
-    },
-    methods: {
-        mounted() {
-            this.$nextTick(() => {
-                this.$nuxt.$loading.start();
-                setTimeout(() => this.$nuxt.$loading.finish(), 500);
-            });
-        }
-    },
-    components: { ItemDetails }
-}
-
+  import ItemDetails from '~/components/ItemDetails.vue'
+  export default {
+      name: "IndexPage",
+      computed: {
+          products() {
+            return this.$store.getters.products()
+          }
+      },
+      methods: {
+          mounted() {
+              this.$nextTick(() => {
+                  this.$nuxt.$loading.start();
+                  setTimeout(() => this.$nuxt.$loading.finish(), 500);
+              });
+          }
+      },
+      components: { ItemDetails }
+  }
 </script>

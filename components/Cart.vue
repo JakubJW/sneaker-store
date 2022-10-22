@@ -48,15 +48,10 @@ export default {
   data () {
     return {
       dialog: false,
-      deletedItem: null,
     }
   },
 
   computed: {
-    products(){
-      return this.$store.getters.inCart
-    },
-
     ...mapGetters('cart', {
       cartProducts: 'cartProducts',
       totalPrice: 'totalPrice',
@@ -83,14 +78,14 @@ export default {
 </script>
 
 <style>
-.transition {
-  opacity: 0;
-  transition: all .5s ease;
-  overflow: hidden;
-  transform: translateX(100px);
-}
+  .transition {
+    opacity: 0;
+    transition: all .5s ease;
+    overflow: hidden;
+    transform: translateX(100px);
+  }
 
-.cartContainer {
-  overflow: hidden;
-}
+  .cartContainer {
+    overflow: hidden;
+  }
 </style>
