@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar flat color="grey lighten-3" class="flex-grow-0">
       <NuxtLink to="/">
-        <v-toolbar-title class="text-uppercase grey-darken-2--text" mx="auto">
+        <v-toolbar-title class="text-uppercase" mx="auto">
           <span class="font-weight-light">sneaker</span>
           <span>store</span>
         </v-toolbar-title>
@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style>
-   .v-application a {
+   .nuxt-link-active {
     text-decoration: none;
     color: #616161;
   }
