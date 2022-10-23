@@ -13,15 +13,16 @@
                 <v-icon>mdi-window-close</v-icon>
             </v-btn>
           </v-card>
-            <v-card-title class="text-h5 text-uppercase">
+          <v-card class="d-flex flex-column align-center" elevation="0">
+            <v-card-title class="text-h5 text-uppercase font-weight-bold">
                 Koszyk
             </v-card-title>
-            <v-card-text class="d-flex my-4 text-uppercase justify-center" v-if="!cartProducts.length">koszyk jest pusty</v-card-text>
+            <v-card-text class="d-flex my-4 justify-center">Produkty: {{ totalQuantity }} | {{ totalPrice }}zł</v-card-text>
             <v-list>
-                <v-list-item class="my-1" v-for="product in cartProducts" :key="product.id" :class="{ 'transition': deletedItem === product.id }">
+                <v-list-item class="my-1" v-for="product in cartProducts" :key="product.id">
                  <v-img contain max-width="80" fill-height :src="product.image"></v-img>
                     <v-list-item-content>
-                        <v-list-item-title class="mx-2 text-uppercase dark-grey--text">{{product.name}}</v-list-item-title>
+                        <v-list-item-title class="mx-2 dark-grey--text">{{product.name}}</v-list-item-title>
                         <v-list-item-subtitle class="mx-2">{{product.size}}</v-list-item-subtitle> 
                         <v-list-item-subtitle class="mx-2">{{product.price + "zł"}}</v-list-item-subtitle>
                       </v-list-item-content>
@@ -33,10 +34,7 @@
                         </v-card>
                 </v-list-item>
             </v-list>
-            <v-spacer/>
-            <v-card class="d-flex justify-end" elevation="0">
-              <h3 class="ma-4">{{"Suma: " + totalPrice + "zł"}}</h3>  
-            </v-card>
+          </v-card>
         </v-card>
     </v-dialog>
 </template>
@@ -78,13 +76,6 @@ export default {
 </script>
 
 <style>
-  .transition {
-    opacity: 0;
-    transition: all .5s ease;
-    overflow: hidden;
-    transform: translateX(100px);
-  }
-
   .cartContainer {
     overflow: hidden;
   }
