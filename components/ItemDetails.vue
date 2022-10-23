@@ -3,8 +3,11 @@
         <template v-slot:activator="{ on, attrs }">
             <v-card elevation="0">
                 <v-img class="product" contain max-width="300" fill-height :src="product.image" v-bind="attrs" v-on="on" />
-                <v-card-subtitle dark class="font-weight-medium">{{ product.name }}</v-card-subtitle>
-                <v-card-text>{{product.price + "zł"}}</v-card-text>
+                <v-card-subtitle dark class="font-weight-medium">
+                    <p class="text--primary">{{ product.name }}</p>
+                    <p class="font-weight-medium">{{ product.category }}</p>
+                    <p class="font-weight-light">{{ product.price + "zł" }} </p>
+                </v-card-subtitle>
             </v-card>
         </template>
         <v-card class="detailsContainer overflow-hidden" pd="4" elevation="0">
@@ -43,7 +46,7 @@
                                 </v-row>
                             </v-btn-toggle>
                         </v-item-group>
-                        <v-btn class="mt-6 white--text" height="50" width="300" color="theme" :disabled="!isSizeSet" @click="addProduct
+                        <v-btn class="mt-6 white--text" height="50" width="100%" color="theme" :disabled="!isSizeSet" @click="addProduct
                         ({product, size})" v-if="$vuetify.breakpoint.mobile">Do koszyka</v-btn>
                     </v-card>
                 </v-col>
